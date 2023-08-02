@@ -1,0 +1,8 @@
+version: "3"
+services:
+  postgres:
+    image: postgres:15
+    ports:
+      - "5490:5432"
+    environment:
+      - POSTGRES_PASSWORD=12qwaszx
