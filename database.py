@@ -1,11 +1,10 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-
-from .settings import settings
+from settings import Settings
 
 engine = create_engine(
-    settings.sqlalchemy_url, connect_args={"check_same_thread": False}
+    "postgresql+psycopg://postgres:12qwaszx@localhost:5432/test_code",
 )
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

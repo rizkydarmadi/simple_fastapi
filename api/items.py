@@ -1,7 +1,7 @@
 from typing import List
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from .. import deps, models
+import deps, models
 from repository.items_repository import ItemsRepository
 from schemas import items_schemas
 

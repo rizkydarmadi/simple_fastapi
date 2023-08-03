@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
-from .. import models, schemas
+import models
+from schemas import items_schemas
 
 
 class ItemsRepository:
@@ -8,7 +9,7 @@ class ItemsRepository:
         return db.query(models.Item).offset(skip).limit(limit).all()
 
     @staticmethod
-    def create_user_item(db: Session, item: schemas.ItemCreate, user_id: int):
+    def create_user_item(db: Session, item: items_schemas.ItemCreate, user_id: int):
         db_item = models.Item(**item.dict(), owner_id=user_id)
         db.add(db_item)
         db.commit()

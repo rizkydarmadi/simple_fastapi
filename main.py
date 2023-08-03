@@ -1,10 +1,10 @@
 from fastapi import Depends, FastAPI, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
-from . import deps, models, security
-from .api import items, users
-from .database import SessionLocal, engine
-from .settings import settings
+import deps, models, security
+from api import items, users
+from database import SessionLocal, engine
+from settings import Settings
 from repository.users_repository import UsersRepository
 from schemas import users_schemas
 
@@ -18,10 +18,10 @@ app.include_router(items.router, tags=["items"])
 def startup_event():
     models.Base.metadata.create_all(bind=engine)
     db: Session = SessionLocal()
-    user = UsersRepository.get_user_by_email(db, settings.super_user_email)
+    user = UsersRepository.get_user_by_email(db, Settings.super_user_email)
     if not user:
         user_in = users_schemas.UserCreate(
-            email=settings.super_user_email, password=settings.super_user_password
+            email=Settings.super_user_email, password=Settings.super_user_password
         )
         UsersRepository.create_user(db, user_in)
     db.close()

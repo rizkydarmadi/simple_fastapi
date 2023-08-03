@@ -2,16 +2,16 @@ from datetime import datetime, timedelta
 
 from jose import jwt
 from passlib.context import CryptContext
-from .settings import settings
+from settings import Settings
 
 ALGORITHM = "HS256"
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 def create_access_token(subject: str):
-    expire = datetime.utcnow() + timedelta(minutes=settings.access_token_expire_minutes)
+    expire = datetime.utcnow() + timedelta(minutes=Settings.access_token_expire_minutes)
     to_encode = {"exp": expire, "sub": str(subject)}
-    encoded_jwt = jwt.encode(to_encode, settings.secret_key, algorithm=ALGORITHM)
+    encoded_jwt = jwt.encode(to_encode, Settings.secret_key, algorithm=ALGORITHM)
     return encoded_jwt
 
 

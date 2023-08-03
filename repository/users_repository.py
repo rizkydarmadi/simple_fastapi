@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
-from .. import models, schemas, security
+import models, security
+from schemas import users_schemas
 
 
 class UsersRepository:
@@ -16,7 +17,7 @@ class UsersRepository:
         return db.query(models.User).offset(skip).limit(limit).all()
 
     @staticmethod
-    def create_user(db: Session, user: schemas.UserCreate):
+    def create_user(db: Session, user: users_schemas.UserCreate):
         hashed_password = security.get_password_hash(user.password)
         db_user = models.User(email=user.email, hashed_password=hashed_password)
         db.add(db_user)

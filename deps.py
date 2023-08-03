@@ -4,9 +4,9 @@ from jose import jwt
 from pydantic import ValidationError
 from sqlalchemy.orm import Session
 from starlette import status
-from . import models, security
-from .database import SessionLocal
-from .settings import settings
+import models, security
+from database import SessionLocal
+from settings import Settings
 from schemas import users_schemas
 from repository.users_repository import UsersRepository
 
@@ -26,7 +26,7 @@ def get_current_user(
 ):
     try:
         payload = jwt.decode(
-            token, settings.secret_key, algorithms=[security.ALGORITHM]
+            token, Settings.secret_key, algorithms=[security.ALGORITHM]
         )
         token_data = users_schemas.TokenPayload(**payload)
     except (jwt.JWTError, ValidationError):
@@ -41,7 +41,7 @@ def get_current_user(
 
 
 def get_current_superuser(current_user: models.User = Depends(get_current_user)):
-    if not current_user.email == settings.super_user_email:
+    if not current_user.email == Settings.super_user_email:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN, detail="Not the superuser"
         )
