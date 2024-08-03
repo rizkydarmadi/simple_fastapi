@@ -3,9 +3,10 @@ uvicorn
 sqlalchemy
 async-exit-stack
 async-generator
-passlib[bcrypt]
 python-jose[cryptography]
 python-multipart
 python-dotenv
 psycopg
 psycopg-binary
+passlib==1.7.4
+bcrypt==4.0.1

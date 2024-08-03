@@ -11,7 +11,7 @@ router = APIRouter()
 @router.post(
     "/users/{user_id}/items/",
     response_model=items_schemas.Item,
-    dependencies=[Depends(deps.get_current_superuser)],
+    dependencies=[Depends(deps.get_current_user)],
 )
 def create_item_for_user(
     user_id: int, item: items_schemas.ItemCreate, db: Session = Depends(deps.get_db)
@@ -27,8 +27,7 @@ def create_item_for_user(
 @router.post("/items/", response_model=items_schemas.Item)
 def create_item_for_current_user(
     item: items_schemas.ItemCreate,
-    db: Session = Depends(deps.get_db),
-    current_user: models.User = Depends(deps.get_current_user),
+    db: Session = Depends(deps.get_db),current_user: models.User = Depends(deps.get_current_user),
 ):
     """
     Create an item.
@@ -38,7 +37,7 @@ def create_item_for_current_user(
     return ItemsRepository.create_user_item(db=db, item=item, user_id=current_user.id)
 
 
-@router.get("/items/", response_model=List[items_schemas.Item])
+@router.get("/items/", response_model=List[items_schemas.Item], dependencies=[Depends(deps.get_current_user)])
 def read_items(skip: int = 0, limit: int = 100, db: Session = Depends(deps.get_db)):
     """
     Read all the items. Doesn't need authentication.

@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker
 from settings import Settings
 
 engine = create_engine(
-    "postgresql+psycopg://postgres:12qwaszx@localhost:5432/test_code",
+    "postgresql+psycopg://myuser:mypassword@db:5432/mydatabase",
 )
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

@@ -8,7 +8,11 @@ from repository.users_repository import UsersRepository
 router = APIRouter()
 
 
-@router.get("/users/", response_model=List[users_schemas.User])
+@router.get(
+    "/users/",
+    response_model=List[users_schemas.User],
+    dependencies=[Depends(deps.get_current_user)],
+)
 def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(deps.get_db)):
     """
     Read users.
@@ -30,7 +34,11 @@ def read_user_me(
     return current_user
 
 
-@router.get("/users/{user_id}", response_model=users_schemas.User)
+@router.get(
+    "/users/{user_id}",
+    response_model=users_schemas.User,
+    dependencies=[Depends(deps.get_current_user)],
+)
 def read_user(user_id: int, db: Session = Depends(deps.get_db)):
     """
     Read the data for a specific user.
@@ -46,7 +54,7 @@ def read_user(user_id: int, db: Session = Depends(deps.get_db)):
 @router.post(
     "/users/",
     response_model=users_schemas.User,
-    dependencies=[Depends(deps.get_current_superuser)],
+    dependencies=[Depends(deps.get_current_user)],
 )
 def create_user(user: users_schemas.UserCreate, db: Session = Depends(deps.get_db)):
     """

@@ -1,8 +1,27 @@
-version: "3"
+version: '3.8'
+
 services:
-  postgres:
+  db:
     image: postgres:15
-    ports:
-      - "5490:5432"
+    container_name: my_postgres
     environment:
-      - POSTGRES_PASSWORD=12qwaszx
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydatabase
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  web:
+    build: .
+    container_name: my_fastapi_app
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgres://myuser:mypassword@db/mydatabase
+    ports:
+      - "8000:8000"
+      
+volumes:
+  postgres_data:
